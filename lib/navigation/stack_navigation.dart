@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kitsunee_flutter/navigation/bottom_navigation.dart';
 import 'package:kitsunee_flutter/screens/home_screen.dart';
-import 'package:kitsunee_flutter/screens/profile_screen.dart';
 import 'package:kitsunee_flutter/screens/search_screen.dart';
 
 class StackNavigation extends StatefulWidget {
   const StackNavigation({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _StackNavigationState createState() => _StackNavigationState();
 }
 
@@ -30,20 +30,26 @@ class _StackNavigationState extends State<StackNavigation> {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
-            return MaterialPageRoute(
-                builder: (context) => const BottomTabNavigation());
+            return _fadeInRoute(const BottomTabNavigation());
           case '/home':
-            return MaterialPageRoute(builder: (context) => const HomeScreen());
+            return _fadeInRoute(const HomeScreen());
           case '/search':
-            return MaterialPageRoute(
-                builder: (context) => const SearchScreen());
-          case '/profile':
-            return MaterialPageRoute(
-                builder: (context) => const ProfileScreen());
+            return _fadeInRoute(const SearchScreen());
+
           default:
-            return MaterialPageRoute(
-                builder: (context) => const BottomTabNavigation());
+            return _fadeInRoute(const BottomTabNavigation());
         }
+      },
+    );
+  }
+
+  PageRouteBuilder _fadeInRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return page;
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(opacity: animation, child: child);
       },
     );
   }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'dart:io' show Platform;
+import 'package:kitsunee_flutter/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class LayoutWrapper extends StatelessWidget {
   final Widget child;
@@ -8,13 +11,18 @@ class LayoutWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Platform.isIOS
-          ? EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top - 60,
-            )
-          : EdgeInsets.zero,
-      child: child,
+    final backgroundColor = Provider.of<ThemeProvider>(context).backgroundColor;
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: Padding(
+        padding: Platform.isIOS
+            ? EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top - 60,
+              )
+            : EdgeInsets.zero,
+        child: child,
+      ),
     );
   }
 }

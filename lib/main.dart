@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kitsunee_flutter/constants/constants.dart';
 import 'package:kitsunee_flutter/navigation/stack_navigation.dart';
+import 'package:kitsunee_flutter/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
-  // Ensure widgets are initialized before loading .env
-  await dotenv.load(); // Load the .env file
+  await dotenv.load();
 
-  // Check if BASE_URL is loaded
-  String? baseUrl = dotenv.env['BASE_URL'];
-  if (baseUrl != null) {
-    print('BASE_URL loaded: $baseUrl');
-  } else {
-    print('Failed to load BASE_URL');
-  }
-
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,11 +21,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return MaterialApp(
       title: 'Kitsunee Flutter',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: themeProvider.isDarkMode ? darkTheme : lightTheme,
       home: const StackNavigation(),
     );
   }

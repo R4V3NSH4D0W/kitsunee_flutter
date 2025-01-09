@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kitsunee_flutter/screens/home_screen.dart';
+import 'package:kitsunee_flutter/screens/my_list_screen.dart';
 import 'package:kitsunee_flutter/screens/profile_screen.dart';
-import 'package:kitsunee_flutter/screens/search_screen.dart';
+import 'package:kitsunee_flutter/screens/schedule_screen.dart';
 
 class BottomTabNavigation extends StatefulWidget {
   const BottomTabNavigation({super.key});
@@ -15,7 +16,8 @@ class _BottomTabNavigationState extends State<BottomTabNavigation> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const SearchScreen(),
+    const ScheduleScreen(),
+    const MyListScreen(),
     const ProfileScreen(),
   ];
 
@@ -31,6 +33,8 @@ class _BottomTabNavigationState extends State<BottomTabNavigation> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pink[400],
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
@@ -38,8 +42,12 @@ class _BottomTabNavigationState extends State<BottomTabNavigation> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.calendar_month_outlined),
+            label: 'Schedule',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'My List',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
