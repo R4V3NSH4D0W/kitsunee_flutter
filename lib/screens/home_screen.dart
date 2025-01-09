@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kitsunee_flutter/components/anime_card.dart';
 import 'package:kitsunee_flutter/helper/api.helper.dart';
 import 'package:kitsunee_flutter/wrappers/layout_wrapper.dart';
+import 'package:kitsunee_flutter/components/slider_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<List<dynamic>> mostFavoriteAnime;
   late Future<List<dynamic>> topAiringAnime;
   late Future<List<dynamic>> movieAnime;
+  late Future<List<dynamic>> spotLight;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     mostFavoriteAnime = fetchMostFavorite();
     topAiringAnime = fetchTopAiring();
     movieAnime = fetchMovie();
+    spotLight = fetchSpotLight(); // Fetch spotlight data
   }
 
   @override
@@ -30,22 +33,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return LayoutWrapper(
       child: Scaffold(
         body: FutureBuilder<List<dynamic>>(
-          future: Future.wait(
-              [populatAnime, mostFavoriteAnime, topAiringAnime, movieAnime]),
+          future: Future.wait([
+            spotLight,
+            populatAnime,
+            mostFavoriteAnime,
+            topAiringAnime,
+            movieAnime
+          ]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
-              final List<dynamic> animeData = snapshot.data![0];
-              final List<dynamic> favoriteAnimeData = snapshot.data![1];
-              final List<dynamic> topAiringAnimeData = snapshot.data![2];
-              final List<dynamic> movieAnime = snapshot.data![3];
+              final List<dynamic> spotLightData = snapshot.data![0];
+              final List<dynamic> animeData = snapshot.data![1];
+              final List<dynamic> favoriteAnimeData = snapshot.data![2];
+              final List<dynamic> topAiringAnimeData = snapshot.data![3];
+              final List<dynamic> movieAnimeData = snapshot.data![4];
 
               return ListView(
-                padding: const EdgeInsets.all(8),
                 children: [
+                  SliderWidget(spotLight: spotLightData),
                   AnimeCard(
                     title: "Popular",
                     animeList: animeData,
@@ -54,8 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: "Most Favorite",
                     animeList: favoriteAnimeData,
                   ),
-                  AnimeCard(title: "Top Airing", animeList: topAiringAnimeData),
-                  AnimeCard(animeList: movieAnime, title: "Movie"),
+                  AnimeCard(
+                    title: "Top Airing",
+                    animeList: topAiringAnimeData,
+                  ),
+                  AnimeCard(
+                    title: "Movie",
+                    animeList: movieAnimeData,
+                  ),
                 ],
               );
             } else {

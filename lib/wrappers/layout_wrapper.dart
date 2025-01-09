@@ -11,7 +11,7 @@ class LayoutWrapper extends StatelessWidget {
     return Padding(
       padding: Platform.isIOS
           ? EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top - 20,
+              top: MediaQuery.of(context).padding.top - 60,
             )
           : EdgeInsets.zero,
       child: child,
