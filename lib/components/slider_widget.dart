@@ -38,12 +38,8 @@ class SliderWidget extends StatelessWidget {
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                Color.fromRGBO(250, 250, 250, 1.1),
+                                Colors.white,
                                 Colors.transparent,
-                              ],
-                              stops: [
-                                0.0,
-                                1.0,
                               ],
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
