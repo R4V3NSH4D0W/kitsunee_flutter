@@ -1,7 +1,43 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:kitsunee_flutter/components/column_anime_card.dart';
+import 'package:kitsunee_flutter/helper/api.helper.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  _SearchScreenState createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _controller = TextEditingController();
+  Timer? _debounce;
+  List<dynamic> _results = [];
+  bool _isLoading = false;
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(seconds: 1, milliseconds: 500), () async {
+      if (query.isNotEmpty) {
+        setState(() {
+          _isLoading = true;
+        });
+        List<dynamic> results = await fetchSearchResult(query: query);
+        setState(() {
+          _results = results;
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -9,52 +45,70 @@ class SearchScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Column(
+          child: Stack(
             children: [
-              Row(
+              Column(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 15.0),
-                        hintText: 'search ...',
-                        suffixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 28,
                         ),
-                        filled: true,
-                        fillColor: Colors.grey[200],
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  ButtonTheme(
-                    child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          onChanged: _onSearchChanged,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 15.0),
+                            hintText: 'Search...',
+                            suffixIcon: const Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[200],
                           ),
-                          side: BorderSide.none,
-                          backgroundColor: Colors.pink[200],
-                          minimumSize: Size(40, 50),
                         ),
-                        child: const Icon(
-                          Icons.tune,
-                          size: 26,
-                          color: Colors.white,
-                        )),
+                      ),
+                      SizedBox(width: 10),
+                      ButtonTheme(
+                        child: OutlinedButton(
+                            onPressed: () {},
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              side: BorderSide.none,
+                              backgroundColor: Colors.pink[200],
+                              minimumSize: Size(40, 50),
+                            ),
+                            child: const Icon(
+                              Icons.tune,
+                              size: 26,
+                              color: Colors.white,
+                            )),
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 10),
+                  if (!_isLoading)
+                    Expanded(
+                      child: ColumnAnimeCard(results: _results),
+                    ),
                 ],
-              )
+              ),
+              if (_isLoading)
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
             ],
           ),
         ),

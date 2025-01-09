@@ -68,3 +68,15 @@ Future<List<dynamic>> fetchSpotLight({int? number}) async {
     throw Exception('Failed to load anime data');
   }
 }
+
+Future<List<dynamic>> fetchSearchResult({required String query}) async {
+  final url = Uri.parse('$baseUrl/api/zoroanime/search?q=$query');
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return List<dynamic>.from(json.decode(response.body)['results']);
+  } else {
+    throw Exception('Failed to load anime data');
+  }
+}

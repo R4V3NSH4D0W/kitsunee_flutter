@@ -30,7 +30,7 @@ class SliderWidget extends StatelessWidget {
                       ),
                       Positioned.fill(
                         child: Container(
-                          color: const Color.fromRGBO(0, 0, 0, 0.3),
+                          color: const Color.fromRGBO(0, 0, 0, 0.4),
                         ),
                       ),
                       Positioned.fill(
@@ -61,12 +61,15 @@ class SliderWidget extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            Text(
-                              item['title'] ?? 'No Title',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            SizedBox(
+                              width: 350,
+                              child: Text(
+                                item['title'] ?? 'No Title',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                             SizedBox(height: 10),
