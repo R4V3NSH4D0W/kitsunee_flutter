@@ -54,7 +54,7 @@ class SliderWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Rank ${item['rank']}",
+                              "#${item['rank']} spotlight",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
