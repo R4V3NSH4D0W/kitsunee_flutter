@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kitsunee_flutter/navigation/bottom_navigation.dart';
+import 'package:kitsunee_flutter/screens/detail_screen.dart';
 import 'package:kitsunee_flutter/screens/home_screen.dart';
 import 'package:kitsunee_flutter/screens/search_screen.dart';
 
@@ -7,7 +8,6 @@ class StackNavigation extends StatefulWidget {
   const StackNavigation({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _StackNavigationState createState() => _StackNavigationState();
 }
 
@@ -18,10 +18,8 @@ class _StackNavigationState extends State<StackNavigation> {
     _checkForUpdate();
   }
 
-  // Update check logic here
   void _checkForUpdate() {
     // Your update check logic
-    // If update is available, set _isUpdateAvailable = true
   }
 
   @override
@@ -35,7 +33,10 @@ class _StackNavigationState extends State<StackNavigation> {
             return _fadeInRoute(const HomeScreen());
           case '/search':
             return _fadeInRoute(const SearchScreen());
-
+          case '/detail':
+            // ✅ Pass arguments to DetailScreen
+            final animeId = settings.arguments as String?;
+            return _fadeInRoute(DetailScreen(animeId: animeId));
           default:
             return _fadeInRoute(const BottomTabNavigation());
         }

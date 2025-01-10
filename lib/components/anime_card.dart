@@ -16,27 +16,42 @@ class AnimeCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildTitle(title),
-        _buildAnimeList(),
+        _buildAnimeList(context),
       ],
     );
   }
 
-  /// Function to build the title section
   Widget _buildTitle(String title) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              print('See All Tapped');
+            },
+            child: const Text(
+              'See All',
+              style: TextStyle(
+                color: Colors.pink,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  /// Function to build the horizontal anime list
-  Widget _buildAnimeList() {
+  Widget _buildAnimeList(BuildContext context) {
     return SizedBox(
       height: 200,
       child: ListView.builder(
@@ -44,23 +59,31 @@ class AnimeCard extends StatelessWidget {
         itemCount: animeList.length,
         itemBuilder: (context, index) {
           final anime = animeList[index];
-          return _buildAnimeCard(anime);
+          return _buildAnimeCard(context, anime);
         },
       ),
     );
   }
 
-  /// Function to build each anime card
-  Widget _buildAnimeCard(dynamic anime) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.network(
-          anime['image'],
-          fit: BoxFit.cover,
-          width: 150,
-          height: 200,
+  Widget _buildAnimeCard(BuildContext context, dynamic anime) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          '/detail',
+          arguments: anime['id'],
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            anime['image'],
+            fit: BoxFit.cover,
+            width: 150,
+            height: 200,
+          ),
         ),
       ),
     );

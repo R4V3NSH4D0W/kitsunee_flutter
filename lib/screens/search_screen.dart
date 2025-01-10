@@ -107,7 +107,9 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               if (_isLoading)
                 Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
+                  ),
                 ),
             ],
           ),

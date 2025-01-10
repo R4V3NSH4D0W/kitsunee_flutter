@@ -80,3 +80,15 @@ Future<List<dynamic>> fetchSearchResult({required String query}) async {
     throw Exception('Failed to load anime data');
   }
 }
+
+Future<Map<String, dynamic>> fetchAnimeDetail({required String id}) async {
+  final url = Uri.parse('$baseUrl/api/zoroanime/animeinfo?id=$id');
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  } else {
+    throw Exception('Failed to load anime data');
+  }
+}
