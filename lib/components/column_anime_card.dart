@@ -15,19 +15,42 @@ class ColumnAnimeCard extends StatelessWidget {
             title: Row(
               children: [
                 GestureDetector(
-                  onTap: () {
-                    //  show details
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: Image.network(
-                      result['image'],
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/detail',
+                        arguments: result['id'],
+                      );
+                    },
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image.network(
+                            result['image'],
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(0, 0, 0, 0.3),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                            top: 50,
+                            left: 50,
+                            child: Icon(
+                              Icons.play_circle,
+                              color: Colors.white,
+                              size: 40,
+                            ))
+                      ],
+                    )),
                 const SizedBox(width: 10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +66,10 @@ class ColumnAnimeCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      result['duration'],
+                      result['duration'] != null &&
+                              result['duration'].isNotEmpty
+                          ? result['duration']
+                          : result["airingEpisode"] ?? '',
                       style: TextStyle(color: Colors.grey),
                     ),
                     OutlinedButton(
