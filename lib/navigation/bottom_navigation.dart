@@ -46,11 +46,11 @@ class _BottomTabNavigationState extends State<BottomTabNavigation> {
             label: 'Schedule',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: Icon(Icons.bookmark_outline),
             label: 'My List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_outline),
             label: 'Profile',
           ),
         ],

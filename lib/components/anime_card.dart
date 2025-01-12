@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class AnimeCard extends StatelessWidget {
   final List<dynamic> animeList;
   final String title;
+  final bool seeAll;
 
   const AnimeCard({
     super.key,
     required this.animeList,
     required this.title,
+    this.seeAll = true,
   });
 
   @override
@@ -15,15 +17,16 @@ class AnimeCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildTitle(title),
+        _buildTitle(context, title),
+        const SizedBox(height: 4),
         _buildAnimeList(context),
       ],
     );
   }
 
-  Widget _buildTitle(String title) {
+  Widget _buildTitle(BuildContext context, String title) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -34,18 +37,19 @@ class AnimeCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          TextButton(
-            onPressed: () {
-              print('See All Tapped');
-            },
-            child: const Text(
-              'See All',
-              style: TextStyle(
-                color: Colors.pink,
-                fontSize: 14,
+          if (seeAll)
+            TextButton(
+              onPressed: () {
+                print('See All Tapped');
+              },
+              child: const Text(
+                'See All',
+                style: TextStyle(
+                  color: Colors.pink,
+                  fontSize: 14,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -54,13 +58,16 @@ class AnimeCard extends StatelessWidget {
   Widget _buildAnimeList(BuildContext context) {
     return SizedBox(
       height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: animeList.length,
-        itemBuilder: (context, index) {
-          final anime = animeList[index];
-          return _buildAnimeCard(context, anime);
-        },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: animeList.length,
+          itemBuilder: (context, index) {
+            final anime = animeList[index];
+            return _buildAnimeCard(context, anime);
+          },
+        ),
       ),
     );
   }
@@ -75,7 +82,7 @@ class AnimeCard extends StatelessWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        margin: const EdgeInsets.only(right: 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Image.network(

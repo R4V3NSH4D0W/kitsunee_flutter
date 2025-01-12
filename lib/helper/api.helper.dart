@@ -92,3 +92,15 @@ Future<Map<String, dynamic>> fetchAnimeDetail({required String id}) async {
     throw Exception('Failed to load anime data');
   }
 }
+
+Future<Map<String, dynamic>> fetchJikanAnime({required int malId}) async {
+  final url = Uri.parse('https://api.jikan.moe/v4/anime/$malId');
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> jsonResponse = json.decode(response.body);
+    return jsonResponse['data'];
+  } else {
+    throw Exception('Failed to load anime data');
+  }
+}

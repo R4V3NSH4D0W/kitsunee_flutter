@@ -34,7 +34,6 @@ class _StackNavigationState extends State<StackNavigation> {
           case '/search':
             return _fadeInRoute(const SearchScreen());
           case '/detail':
-            // ✅ Pass arguments to DetailScreen
             final animeId = settings.arguments as String?;
             return _fadeInRoute(DetailScreen(animeId: animeId));
           default:
