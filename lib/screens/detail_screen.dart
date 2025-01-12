@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitsunee_flutter/components/anime_card.dart';
 import 'package:kitsunee_flutter/helper/api.helper.dart';
 import 'package:kitsunee_flutter/helper/utils.helper.dart';
 
@@ -7,7 +8,7 @@ import 'package:kitsunee_flutter/ui/buttons.dart';
 class DetailScreen extends StatefulWidget {
   final String? animeId;
 
-  const DetailScreen({Key? key, required this.animeId}) : super(key: key);
+  const DetailScreen({super.key, required this.animeId});
 
   @override
   _DetailScreenState createState() => _DetailScreenState();
@@ -59,9 +60,7 @@ class _DetailScreenState extends State<DetailScreen> {
       filteredEpisodes = query.isEmpty
           ? episodes
           : episodes
-              .where((episode) => episode['number']
-                  .toString()
-                  .contains(query)) // filter by episode number as string
+              .where((episode) => episode['number'].toString().contains(query))
               .toList();
     });
   }
@@ -74,7 +73,11 @@ class _DetailScreenState extends State<DetailScreen> {
           future: _combinedAnimeDetail,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
+                ),
+              );
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (snapshot.hasData) {
@@ -90,6 +93,11 @@ class _DetailScreenState extends State<DetailScreen> {
                     _buildDescription(anime),
                     _buildEpisodes(anime['AnimeDetail']['episodes'],
                         anime['AnimeDetail']['image']),
+                    AnimeCard(
+                      animeList: anime["AnimeDetail"]["recommendations"],
+                      title: 'More Like This',
+                      seeAll: false,
+                    ),
                   ],
                 ),
               );
@@ -108,7 +116,9 @@ class _DetailScreenState extends State<DetailScreen> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
       child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,58 +152,61 @@ class _DetailScreenState extends State<DetailScreen> {
           ],
         ),
         const SizedBox(height: 10),
-        SizedBox(
-          height: 150,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: filteredEpisodes.length,
-            itemBuilder: (context, index) {
-              final episode = filteredEpisodes[index];
-              return GestureDetector(
-                onTap: () {},
-                child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: Stack(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            image,
-                            fit: BoxFit.cover,
-                            width: 180,
-                            height: 150,
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color.fromRGBO(0, 0, 0, 0.3),
-                              borderRadius: BorderRadius.circular(12),
+        Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: SizedBox(
+              height: 150,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: filteredEpisodes.length,
+                itemBuilder: (context, index) {
+                  final episode = filteredEpisodes[index];
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                image,
+                                fit: BoxFit.cover,
+                                width: 180,
+                                height: 150,
+                              ),
                             ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 10,
-                          left: 10,
-                          child: Text("Episode ${episode['number'].toString()}",
-                              style: const TextStyle(
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(0, 0, 0, 0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              left: 10,
+                              child: Text(
+                                  "Episode ${episode['number'].toString()}",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Positioned(
+                                top: 50,
+                                left: 70,
+                                child: Icon(
+                                  Icons.play_circle,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Positioned(
-                            top: 50,
-                            left: 70,
-                            child: Icon(
-                              Icons.play_circle,
-                              color: Colors.white,
-                              size: 40,
-                            ))
-                      ],
-                    )),
-              );
-            },
-          ),
-        )
+                                  size: 40,
+                                ))
+                          ],
+                        )),
+                  );
+                },
+              ),
+            ))
       ]),
     );
   }
