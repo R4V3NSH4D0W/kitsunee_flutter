@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:kitsunee_flutter/providers/app_provider.dart';
 
 class SliderWidget extends StatelessWidget {
   final List<dynamic> spotLight;
@@ -25,7 +27,8 @@ class SliderWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Center(
-                              child: Icon(Icons.error, color: Colors.white));
+                            child: Icon(Icons.error, color: Colors.white),
+                          );
                         },
                       ),
                       Positioned.fill(
@@ -76,7 +79,9 @@ class SliderWidget extends StatelessWidget {
                             Row(
                               children: [
                                 ElevatedButton.icon(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    // Play button action
+                                  },
                                   icon: Icon(
                                     Icons.play_arrow,
                                     color: Colors.white,
@@ -96,28 +101,66 @@ class SliderWidget extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(width: 10),
-                                OutlinedButton.icon(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.add,
-                                    color: Colors.black,
-                                  ),
-                                  label: Text(
-                                    "My List",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: Colors.black,
-                                      width: 2,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
+                                Consumer<AppProvider>(
+                                  builder: (context, appProvider, child) {
+                                    final isInList =
+                                        appProvider.isInList(item['id']);
+                                    return OutlinedButton.icon(
+                                      onPressed: () {
+                                        if (isInList) {
+                                          appProvider
+                                              .removeFromList(item['id']);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Removed from My List',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              backgroundColor: Colors.pink,
+                                            ),
+                                          );
+                                        } else {
+                                          appProvider.addToList(item['id']);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Added to My List',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              backgroundColor: Colors.pink,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      icon: Icon(
+                                        isInList ? Icons.check : Icons.add,
+                                        color: Colors.black,
+                                      ),
+                                      label: Text(
+                                        isInList ? "In My List" : "My List",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color: Colors.black,
+                                          width: 2,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
