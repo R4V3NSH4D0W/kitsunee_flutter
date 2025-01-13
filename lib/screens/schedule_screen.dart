@@ -97,11 +97,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               if (loading)
                 Expanded(
                   child: Center(
-                    child: const CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.pink),
+                    ),
                   ),
                 ),
               if (!loading && _selectedSchedule != null)
-                Expanded(child: ColumnAnimeCard(results: _scheduleData)),
+                Expanded(
+                    child: ColumnAnimeCard(
+                  results: _scheduleData,
+                  isFromSchedule: true,
+                )),
             ],
           ),
         ),
