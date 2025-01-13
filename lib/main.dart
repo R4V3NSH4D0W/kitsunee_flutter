@@ -3,14 +3,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:kitsunee_flutter/constants/constants.dart';
 import 'package:kitsunee_flutter/navigation/stack_navigation.dart';
 import 'package:kitsunee_flutter/providers/theme_provider.dart';
+import 'package:kitsunee_flutter/providers/app_provider.dart'; // Import your AppProvider
 import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AppProvider()),
+      ],
       child: const MyApp(),
     ),
   );

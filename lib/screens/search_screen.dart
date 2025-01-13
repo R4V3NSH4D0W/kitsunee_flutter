@@ -14,7 +14,25 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
   List<dynamic> _results = [];
+  List<dynamic> _popularAnime = [];
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPopularAnime();
+  }
+
+  Future<void> _fetchPopularAnime() async {
+    setState(() {
+      _isLoading = true;
+    });
+    List<dynamic> popularAnime = await fetchPopularAnime();
+    setState(() {
+      _popularAnime = popularAnime;
+      _isLoading = false;
+    });
+  }
 
   void _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
@@ -101,7 +119,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   SizedBox(height: 10),
                   if (!_isLoading)
                     Expanded(
-                      child: ColumnAnimeCard(results: _results),
+                      child: ColumnAnimeCard(
+                        results:
+                            _controller.text.isEmpty ? _popularAnime : _results,
+                      ),
                     ),
                 ],
               ),
