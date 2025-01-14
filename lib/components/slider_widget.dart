@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kitsunee_flutter/helper/custom_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:kitsunee_flutter/providers/app_provider.dart';
 
@@ -110,32 +111,14 @@ class SliderWidget extends StatelessWidget {
                                         if (isInList) {
                                           appProvider
                                               .removeFromList(item['id']);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Removed from My List',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              backgroundColor: Colors.pink,
-                                            ),
-                                          );
+                                          CustomSnackbar.show(context,
+                                              message:
+                                                  '${item['title']} removed from your list!');
                                         } else {
                                           appProvider.addToList(item['id']);
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'Added to My List',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              backgroundColor: Colors.pink,
-                                            ),
-                                          );
+                                          CustomSnackbar.show(context,
+                                              message:
+                                                  '${item['title']} Added to your list!');
                                         }
                                       },
                                       icon: Icon(

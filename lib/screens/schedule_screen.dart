@@ -87,7 +87,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return SafeArea(
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
               Navbar(),
