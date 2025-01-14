@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kitsunee_flutter/components/anime_card.dart';
 import 'package:kitsunee_flutter/helper/api.helper.dart';
+import 'package:kitsunee_flutter/helper/custom_snackbar.dart';
 import 'package:kitsunee_flutter/helper/utils.helper.dart';
+import 'package:kitsunee_flutter/providers/app_provider.dart';
 
 import 'package:kitsunee_flutter/ui/buttons.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
   final String? animeId;
@@ -87,7 +90,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 child: Column(
                   children: [
                     _buildHeader(anime),
-                    _buildTitleAndActions(anime),
+                    _buildTitleAndActions(context, anime),
                     _buildRatingAndInfo(anime),
                     _buildPlayAndDownloadButtons(),
                     _buildDescription(anime),
@@ -237,7 +240,8 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget _buildTitleAndActions(Map<String, dynamic> anime) {
+  Widget _buildTitleAndActions(
+      BuildContext context, Map<String, dynamic> anime) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Row(
@@ -252,10 +256,42 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
           ),
           Row(
-            children: const [
-              Icon(Icons.bookmarks_outlined),
-              SizedBox(width: 10),
-              Icon(Icons.share_outlined),
+            children: [
+              Consumer<AppProvider>(
+                builder: (context, appProvider, child) {
+                  final isInMyList =
+                      appProvider.isInList(anime['AnimeDetail']['id']);
+
+                  return IconButton(
+                    onPressed: () {
+                      if (isInMyList) {
+                        appProvider.removeFromList(anime['AnimeDetail']['id']);
+                        CustomSnackbar.show(
+                          context,
+                          message:
+                              "${anime['AnimeDetail']['title']} removed from your List",
+                        );
+                      } else {
+                        appProvider.addToList(anime['AnimeDetail']['id']);
+                        CustomSnackbar.show(
+                          context,
+                          message:
+                              "${anime['AnimeDetail']['title']} Added to your List",
+                        );
+                      }
+                    },
+                    icon: isInMyList
+                        ? const Icon(
+                            Icons.bookmark_add,
+                            color: Colors.pink,
+                            size: 26,
+                          )
+                        : const Icon(Icons.bookmark_add_outlined,
+                            size: 26, color: Colors.pink),
+                  );
+                },
+              ),
+              Icon(Icons.share, color: Colors.pink),
             ],
           ),
         ],
