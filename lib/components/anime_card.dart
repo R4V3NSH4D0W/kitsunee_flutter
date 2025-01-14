@@ -40,7 +40,11 @@ class AnimeCard extends StatelessWidget {
           if (seeAll)
             TextButton(
               onPressed: () {
-                print('See All Tapped');
+                Navigator.pushNamed(
+                  context,
+                  '/seeall',
+                  arguments: title,
+                );
               },
               child: const Text(
                 'See All',

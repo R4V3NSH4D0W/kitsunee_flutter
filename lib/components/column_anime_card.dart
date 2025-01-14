@@ -111,7 +111,6 @@ class ColumnAnimeCard extends StatelessWidget {
                               ),
                               onPressed: () {
                                 if (isAdded) {
-                                  // Remove from list
                                   appProvider.removeFromList(result['id']);
                                   CustomSnackbar.show(
                                     context,
@@ -119,7 +118,6 @@ class ColumnAnimeCard extends StatelessWidget {
                                         '${result['title']} removed from your list!',
                                   );
                                 } else {
-                                  // Add to list
                                   appProvider.addToList(result['id']);
                                   CustomSnackbar.show(
                                     context,

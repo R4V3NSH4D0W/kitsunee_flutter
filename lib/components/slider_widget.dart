@@ -166,13 +166,22 @@ class SliderWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Kitsunee",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                Row(
+                  children: [
+                    const Image(
+                      image: AssetImage('assets/logo.png'),
+                      width: 50,
+                      height: 50,
+                    ),
+                    Text(
+                      "Kitsunee",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
                 IconButton(
                   icon: Icon(Icons.search),
