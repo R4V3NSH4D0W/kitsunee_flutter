@@ -4,6 +4,7 @@ import 'package:kitsunee_flutter/screens/detail_screen.dart';
 import 'package:kitsunee_flutter/screens/home_screen.dart';
 import 'package:kitsunee_flutter/screens/search_screen.dart';
 import 'package:kitsunee_flutter/screens/see_all_screen.dart';
+import 'package:kitsunee_flutter/screens/video_player_screen.dart';
 
 class StackNavigation extends StatefulWidget {
   const StackNavigation({super.key});
@@ -40,6 +41,9 @@ class _StackNavigationState extends State<StackNavigation> {
           case '/seeall':
             final type = settings.arguments as String?;
             return _fadeInRoute(SeeAllScreen(type: type));
+          case '/videoScreen':
+            final episodeId = settings.arguments as String?;
+            return _fadeInRoute(VideoPlayerScreen(episodeId: episodeId));
           default:
             return _fadeInRoute(const BottomTabNavigation());
         }
