@@ -116,3 +116,17 @@ Future<List<dynamic>> fetchReleaseSchedule({required String date}) async {
     throw Exception('Failed to load anime data');
   }
 }
+
+Future<Map<String, dynamic>> fetchEpisodeSource({required String id}) async {
+  print("id: $id");
+  final url = Uri.parse('$baseUrl/api/zoroanime/episodesource?id=$id');
+
+  final response = await http.get(url);
+  print("response: ${response.body}");
+
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  } else {
+    throw Exception('Failed to load anime data');
+  }
+}

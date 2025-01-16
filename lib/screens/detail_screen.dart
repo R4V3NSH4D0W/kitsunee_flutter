@@ -165,7 +165,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 itemBuilder: (context, index) {
                   final episode = filteredEpisodes[index];
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/videoScreen',
+                          arguments: episode['id']);
+                    },
                     child: Container(
                         margin: const EdgeInsets.only(right: 10),
                         child: Stack(
